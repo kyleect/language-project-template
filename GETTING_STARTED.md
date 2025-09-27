@@ -2,8 +2,8 @@
 
 ## Overview
 
-- Setup
-  - [ ] Installing dependencies
+- [x] Setup
+  - [x] Installing dependencies
 - [x] Project Layout
 - [ ] Modeling The Language
   - [ ] AST
@@ -40,8 +40,9 @@
 
 ### Installing Dependencies
 
-- Rust
-- Just
+- [Rust 1.88](https://rust-lang.org/)
+- [Just](https://just.systems/) - Task Runner
+- [Docker](https://www.docker.com/) _Optional_
 
 ### Project Layout
 
