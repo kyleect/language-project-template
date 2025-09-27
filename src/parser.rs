@@ -3,7 +3,7 @@
 use lalrpop_util::lalrpop_mod;
 
 use crate::{
-    ast::{self},
+    ast,
     errors::{ExprResult, SyntaxError},
     lexer::lex,
     parser::grammar::ExprParser,
