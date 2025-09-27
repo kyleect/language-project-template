@@ -2,4 +2,3 @@ target/
 .git/
 ci/
 .github/
-spec/

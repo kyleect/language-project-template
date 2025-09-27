@@ -7,6 +7,7 @@ WORKDIR /usr/local/src
 
 COPY Cargo.toml Cargo.lock ./
 COPY src src/
+COPY spec spec/
 COPY examples examples/
 COPY build.rs build.rs
 
@@ -20,8 +21,8 @@ FROM alpine:3.22
 WORKDIR /usr/local/bin
 
 COPY --from=build /usr/local/src/target/release/examples/language-project-template /usr/local/bin/language-project-template
+COPY --from=build /usr/local/src/spec/ /usr/local/src/spec/
 
-# Request files can be mounted here
 WORKDIR /usr/local/src
 
 ENTRYPOINT ["/usr/local/bin/language-project-template"]
