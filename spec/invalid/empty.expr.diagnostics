@@ -9,7 +9,7 @@
             Label {
                 style: Primary,
                 file_id: 0,
-                range: 1..1,
+                range: 0..0,
                 message: "",
             },
         ],

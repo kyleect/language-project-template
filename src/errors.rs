@@ -161,7 +161,7 @@ pub mod diagnostics {
 
     use crate::{errors::ExprErrorS, span::Span};
 
-    pub fn get_diagnostics(errs: &[ExprErrorS], source: &str) -> Vec<Diagnostic<()>> {
+    pub fn get_diagnostics(errs: &[ExprErrorS], source: &str) -> Vec<Diagnostic<usize>> {
         errs.iter()
             .map(|(err, span)| {
                 let a = err.as_diagnostic(source, span);
@@ -188,12 +188,15 @@ pub mod diagnostics {
     }
 
     impl ExprDiagnostic {
-        pub fn to_diagnostic(&self, span: &Span) -> codespan_reporting::diagnostic::Diagnostic<()> {
+        pub fn to_diagnostic(
+            &self,
+            span: &Span,
+        ) -> codespan_reporting::diagnostic::Diagnostic<usize> {
             codespan_reporting::diagnostic::Diagnostic {
                 severity: ExprDiagnosisSeverity::ERROR.to_severity(),
                 code: Some(self.code.clone()),
                 message: self.message.clone(),
-                labels: vec![Label::primary((), span.clone())],
+                labels: vec![Label::primary(0, span.clone())],
                 notes: vec![],
             }
         }
@@ -386,27 +389,29 @@ pub mod diagnostics {
         use std::ops::Range;
 
         fn dummy_source() -> &'static str {
-            "fn test_function(x: i32) -> i32 { x + 1 }"
+            "("
         }
 
         fn dummy_range() -> Span {
-            Range { start: 0, end: 5 }
+            Range { start: 1, end: 1 }
         }
 
         #[test]
         fn it_converts_lexerror_to_diagnostic() {
             let source = dummy_source();
-            let range = dummy_range();
+            let expected_range = dummy_range();
             let error = ExprError::LexError(LexicalError::InvalidToken);
-            let diagnostics = get_diagnostics(&[(error, range.clone())], source);
+            let diagnostics = get_diagnostics(&[(error, expected_range.clone())], source);
 
-            assert_eq!(diagnostics.len(), 1);
+            assert_eq!(1, diagnostics.len());
+
             let diagnostic = &diagnostics[0];
-            assert_eq!(diagnostic.code, Some("lexical".to_string()));
-            assert_eq!(diagnostic.message, "Invalid token".to_string());
-            assert_eq!(diagnostic.severity, Severity::Error);
-            assert_eq!(diagnostic.labels.len(), 1);
-            assert_eq!(diagnostic.labels[0], Label::primary((), range));
+
+            assert_eq!(Some("lexical".to_string()), diagnostic.code);
+            assert_eq!("Invalid token".to_string(), diagnostic.message);
+            assert_eq!(Severity::Error, diagnostic.severity);
+            assert_eq!(1, diagnostic.labels.len());
+            assert_eq!(Label::primary(0, expected_range), diagnostic.labels[0]);
         }
     }
 }

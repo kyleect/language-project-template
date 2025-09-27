@@ -1,0 +1,10 @@
+Err(
+    [
+        (
+            LexError(
+                InvalidToken,
+            ),
+            0..0,
+        ),
+    ],
+)
