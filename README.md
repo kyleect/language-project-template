@@ -1,6 +1,19 @@
 # language-project-template
 
-My starter for language projects. Rust, LALRPop, and Logos. Includes lexer, parser, capturing spans, error handling & diagnostics, a language server and VS Code extension, example CLI with Dockerization.
+My starter for language projects. Rust, lalrpop, and logos.
+
+## Includes
+
+- Lexing,
+- Parsing,
+- Capturing spans,
+- Error handling & diagnostics
+- Dockerized CLI
+
+### Future
+
+- Language server
+- VS Code extension
 
 ## Project
 
