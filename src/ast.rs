@@ -15,12 +15,6 @@ pub enum ExprLiteral {
     Number(f64),
 }
 
-/// Expression preforming an infix operation
-///
-/// ```egon
-/// 1 + 2;
-/// true != false;
-/// ```
 #[derive(Clone, Debug, PartialEq)]
 pub struct ExprInfixOp {
     pub lt: ExprS,
