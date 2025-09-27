@@ -9,9 +9,9 @@ pub struct Expr {
 }
 
 impl Expr {
-    pub fn new(kind: ExprKind, span: Range<usize>) -> Self {
+    pub fn new<T: Into<ExprKind>>(kind: T, span: Range<usize>) -> Self {
         Self {
-            kind: Box::new(kind),
+            kind: Box::new(kind.into()),
             span,
         }
     }
@@ -59,6 +59,12 @@ impl ExprKind {
 impl From<f64> for ExprKind {
     fn from(value: f64) -> Self {
         Self::Literal(Box::new(ExprLiteral::Number(value)))
+    }
+}
+
+impl From<(Expr, OpInfix, Expr)> for ExprKind {
+    fn from(value: (Expr, OpInfix, Expr)) -> Self {
+        Self::infix_op(value.0, value.1, value.2)
     }
 }
 

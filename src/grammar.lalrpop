@@ -25,11 +25,7 @@ Term: ast::Expr = {
         let span = l.start()..r.end();
 
         ast::Expr::new(
-            ast::ExprKind::infix_op(
-                l.clone(),
-                ast::OpInfix::Add,
-                r.clone()
-            ),
+            (l, ast::OpInfix::Add, r),
             span
         )
     },
@@ -37,11 +33,7 @@ Term: ast::Expr = {
         let span = l.start()..r.end();
 
         ast::Expr::new(
-            ast::ExprKind::infix_op(
-                l.clone(),
-                ast::OpInfix::Subtract,
-                r.clone()
-            ),
+            (l, ast::OpInfix::Subtract, r),
             span
         )
     },
@@ -53,11 +45,7 @@ Factor: ast::Expr = {
         let span = l.start()..r.end();
 
         ast::Expr::new(
-            ast::ExprKind::infix_op(
-                l.clone(),
-                ast::OpInfix::Multiply,
-                r.clone()
-            ),
+            (l, ast::OpInfix::Multiply, r),
             span
         )
     },
@@ -65,11 +53,7 @@ Factor: ast::Expr = {
         let span = l.start()..r.end();
 
         ast::Expr::new(
-            ast::ExprKind::infix_op(
-                l.clone(),
-                ast::OpInfix::Divide,
-                r.clone()
-            ),
+            (l, ast::OpInfix::Divide, r),
             span
         )
     },
@@ -79,7 +63,7 @@ Factor: ast::Expr = {
 Literal: ast::Expr = {
     <n:Spanned<number>> => {
         let (value, span) = n;
-        ast::Expr::new(value.into(), span)
+        ast::Expr::new(value, span)
     },
     "(" <Expr> ")",
 };
