@@ -1,0 +1,75 @@
+//! Parser and associated types
+
+use crate::errors::{ExprErrorS, SyntaxError};
+use crate::ast;
+use crate::lexer::Token;
+use crate::span::Spanned;
+
+grammar<'err>(source: &str, errors: &'err mut Vec<ExprErrorS>);
+
+pub Expr: ast::Expr = {
+    Factor2,
+    <e:!> => {
+        errors.push(SyntaxError::from_parser_error(e.error, source));
+        ast::Expr::Error
+    }
+};
+
+Factor2: ast::Expr = {
+    <l:Spanned<Expr>> "+" <r:Spanned<Factor>> => ast::Expr::InfixOp(Box::new(ast::ExprInfixOp {
+        lt: l,
+        op: ast::OpInfix::Add,
+        rt: r
+    })),
+    <l:Spanned<Expr>> "-" <r:Spanned<Factor>> => ast::Expr::InfixOp(Box::new(ast::ExprInfixOp {
+        lt: l,
+        op: ast::OpInfix::Subtract,
+        rt: r
+    })),
+    Factor,
+};
+
+Factor: ast::Expr = {
+    <l:Spanned<Factor>> "*" <r:Spanned<Term>> => ast::Expr::InfixOp(Box::new(ast::ExprInfixOp {
+        lt: l,
+        op: ast::OpInfix::Multiply,
+        rt: r
+    })),
+    <l:Spanned<Factor>> "/" <r:Spanned<Term>> => ast::Expr::InfixOp(Box::new(ast::ExprInfixOp {
+        lt: l,
+        op: ast::OpInfix::Divide,
+        rt: r
+    })),
+    Term,
+};
+
+Term: ast::Expr = {
+    ExprLiteral,
+    "(" <Expr> ")",
+};
+
+ExprLiteral: ast::Expr = {
+    number => ast::Expr::Literal(Box::new(ast::ExprLiteral::Number(<>)))
+};
+
+// Utility Types
+
+ExprS = Spanned<Expr>;
+
+Spanned<T>: Spanned<T> = <l:@L> <t:T> <r:@R> =>
+    (t, l..r);
+
+extern {
+    type Location = usize;
+    type Error = ExprErrorS;
+
+    enum Token {
+        "(" => Token::LParan,
+        ")" => Token::RParan,
+        "+" => Token::Plus,
+        "-" => Token::Minus,
+        "/" => Token::Slash,
+        "*" => Token::Astrisk,
+        number => Token::Number(<f64>),
+    }
+}
