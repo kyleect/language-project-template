@@ -29,3 +29,7 @@ See [/spec](./spec/) for more syntax examples.
 ### Specification Tests
 
 The [specification tests](./tests/spec_tests.rs) read in `*.expr` files in the [`spec/`](./spec) directory and compare the output against their corrosponding expected result files (e.g. `*.expr.tokens`). These [spec]((./spec) files are split between [valid](./spec/valid) and [invalid](./spec/invalid) examples.
+
+### Coverage
+
+Run `just coverage` or [coverage.sh](./coverage.sh) to generate a coverage report.
