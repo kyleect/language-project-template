@@ -31,7 +31,15 @@ fn main() {
 
     match &cli.command {
         Commands::Lex => {
-            let tokens = lex(&contents);
+            let tokens: Vec<
+                Result<
+                    (usize, language_project_template::prelude::Token, usize),
+                    (
+                        language_project_template::prelude::ExprError,
+                        std::ops::Range<usize>,
+                    ),
+                >,
+            > = lex(&contents);
             println!("{:#?}", tokens);
         }
         Commands::Parse => {
