@@ -18,6 +18,7 @@ My starter for language projects. Rust, lalrpop, and logos.
 
 ## Project
 
+- [Getting Started](./GETTING_STARTED.md)
 - [Lexer](./src/lexer.rs)
 - [Parser](./src/parser.rs), [Grammar](./src/grammer.lalrpop), [AST](./src/ast.rs)
 - [Valid](./spec/valid/) & [Invalid](./spec/invalid) [Syntax Examples](./spec/)
