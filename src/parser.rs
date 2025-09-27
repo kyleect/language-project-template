@@ -33,3 +33,23 @@ pub fn parse(source: &str) -> ExprResult<ast::Expr> {
 
     if errs.is_empty() { Ok(expr) } else { Err(errs) }
 }
+
+#[cfg(test)]
+mod parse_tests {
+    use crate::{errors::ExprError, parser::parse};
+
+    #[test]
+    fn invalid_parse_produces_error() {
+        let result = parse("(").err().unwrap();
+
+        pretty_assertions::assert_eq!(
+            vec![(
+                ExprError::SyntaxError(crate::errors::SyntaxError::UnrecognizedEOF {
+                    expected: vec!["\"(\"".to_string(), "number".to_string()]
+                }),
+                1..1
+            )],
+            result
+        );
+    }
+}
