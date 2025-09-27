@@ -30,12 +30,12 @@ impl Expr {
 
     /// Get the expression's span start
     pub fn start(&self) -> usize {
-        self.span.start
+        self.span().start
     }
 
     /// Get the expression's span end
     pub fn end(&self) -> usize {
-        self.span.end
+        self.span().end
     }
 }
 
@@ -47,10 +47,6 @@ pub enum ExprKind {
 }
 
 impl ExprKind {
-    pub fn literal(value: ExprLiteral) -> Self {
-        Self::Literal(Box::new(value))
-    }
-
     pub fn infix_op(lt: Expr, op: OpInfix, rt: Expr) -> Self {
         Self::InfixOp(Box::new(ExprInfixOp {
             lt: lt.into(),
