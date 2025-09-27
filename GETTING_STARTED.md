@@ -143,13 +143,13 @@ impl Iterator for Lexer<'_> {
 
 ### Whitespace
 
-This project ignores whitespace by default when lexing defined in [./src/lexer.rs](./src/lexer.rs):
+This project ignores whitespace by default when lexing.
 
 ```rust
 #[logos(skip r"[ \t\n\f]+")]
 ```
 
-Removing this line and adding token/s for whitespace is also possible. It depends on the needs of your language/parsing project.
+Removing this line in [./src/lexer.rs](./src/lexer.rs) and adding token/s for whitespace is also possible. It depends on the needs of your language/parsing project.
 
 ## Testing
 
