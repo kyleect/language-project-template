@@ -26,14 +26,14 @@
     - [ ] Collect All The Errors
     - [ ] AST Error Nodes
 - [ ] Testing
-  - [ ] Specification Tests
-    - [ ] Valid Syntax Tests
-      - [ ] Expected Tokens
-      - [ ] Expected AST
-    - [ ] Invalid Syntax Tests
-      - [ ] Expected Tokens
-      - [ ] Expected Error
-      - [ ] Expected Diagnostic
+  - [x] Specification Tests
+    - [x] Valid Syntax Tests
+      - [x] Expected Tokens
+      - [x] Expected AST
+    - [x] Invalid Syntax Tests
+      - [x] Expected Tokens
+      - [x] Expected Error
+      - [x] Expected Diagnostic
   - [ ] Coverage
 
 ## Setup
@@ -76,3 +76,23 @@ This is where the `parse` function lives. It wraps the [grammar file](#grammarla
 #### [`span.rs`](./src/span.rs)
 
 This is where the `Span` and `Spanned<T>` utility types are defined.
+
+## Testing
+
+Language projects tend to need a health mix of low (unit tests) to high (integration, e2e) scoped tests to be effective. As the grammar/syntax grows, the project expands, more syntax features needing to be mixed/matched together, more and more tests are needed to prevent breaking things.
+
+### Unit Tests
+
+Unit tests live with the implementation code, the same as most Rust projects.
+
+### Specification Tests
+
+Specification tests live in [./spec/](./spec/) and are ran by [./tests/spec_tests.rs](./tests/spec_tests.rs). They are split between [valid](./spec/valid/) and [invalid](./spec/invalid/) syntax tests.
+
+#### Valid Syntax Tests
+
+The [valid](./spec/valid/) syntax tests consist of an input file `NAME.expr` along with expected results `NAME.expr.tokens` for the lexer and `NAME.expr.ast` for the parser. These are great for both catching bugs and helping identify where the problem is.
+
+#### Invalid Syntax Tests
+
+The [invalid](./spec/invalid/) syntax tests consist of an input file `NAME.expr` along with expected results `NAME.expr.tokens` for the lexer and expected error cases `NAME.expr.error` & `NAME.expr.diagnostics`. These are great for testing integrations like the language server or the VS code extension.
