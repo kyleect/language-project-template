@@ -58,6 +58,8 @@ In this starter:
 
 #### [`errors.rs`](./src/errors.rs)
 
+This is where the `ExprError` and `ExprResult<T>` are defined. This is also where diagnostics logic live.
+
 #### [`grammar.lalrpop`](./src/grammar.lalrpop)
 
 This is where the language's grammar is defined. It uses LALRPOP, which is a Rust like DSL for defining grammars, to produce a parsing function that's used by the [parser](#parserrs). It's configured to read in the tokens produced by the [lexer](#lexerrs)
