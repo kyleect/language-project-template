@@ -1,0 +1,15 @@
+Err(
+    [
+        (
+            SyntaxError(
+                UnrecognizedEOF {
+                    expected: [
+                        "\"(\"",
+                        "number",
+                    ],
+                },
+            ),
+            1..1,
+        ),
+    ],
+)

@@ -1,0 +1,23 @@
+Ok(
+    InfixOp(
+        ExprInfixOp {
+            lt: (
+                Literal(
+                    Number(
+                        1.0,
+                    ),
+                ),
+                0..1,
+            ),
+            op: Add,
+            rt: (
+                Literal(
+                    Number(
+                        2.0,
+                    ),
+                ),
+                4..5,
+            ),
+        },
+    ),
+)
