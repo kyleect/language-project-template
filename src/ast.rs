@@ -16,8 +16,26 @@ impl Expr {
         }
     }
 
+    pub fn error() -> Self {
+        Self {
+            kind: Box::new(ExprKind::Error),
+            span: 0..0,
+        }
+    }
+
+    /// Get the expression's span
     pub fn span(&self) -> Range<usize> {
         self.span.clone()
+    }
+
+    /// Get the expression's span start
+    pub fn start(&self) -> usize {
+        self.span.start
+    }
+
+    /// Get the expression's span end
+    pub fn end(&self) -> usize {
+        self.span.end
     }
 }
 
@@ -26,6 +44,26 @@ pub enum ExprKind {
     Literal(Box<ExprLiteral>),
     InfixOp(Box<ExprInfixOp>),
     Error,
+}
+
+impl ExprKind {
+    pub fn literal(value: ExprLiteral) -> Self {
+        Self::Literal(Box::new(value))
+    }
+
+    pub fn infix_op(lt: Expr, op: OpInfix, rt: Expr) -> Self {
+        Self::InfixOp(Box::new(ExprInfixOp {
+            lt: lt.into(),
+            op,
+            rt: rt.into(),
+        }))
+    }
+}
+
+impl From<f64> for ExprKind {
+    fn from(value: f64) -> Self {
+        Self::Literal(Box::new(ExprLiteral::Number(value)))
+    }
 }
 
 /// Expression representing literal values e.g. `number`

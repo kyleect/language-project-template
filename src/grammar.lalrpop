@@ -5,52 +5,83 @@ use crate::ast;
 use crate::lexer::Token;
 use crate::span::Spanned;
 
-grammar<'err>(source: &str, errors: &'err mut Vec<ExprErrorS>);
+grammar<'err>(
+    source: &str,
+    errors: &'err mut Vec<ExprErrorS>
+);
 
 pub Expr: ast::Expr = {
-    Factor2,
+    Term,
     <e:!> => {
+        // Error recovery during parsing
+
         errors.push(SyntaxError::from_parser_error(e.error, source));
-        ast::Expr::new(ast::ExprKind::Error, 0..0)
+        ast::Expr::error()
     }
 };
 
-Factor2: ast::Expr = {
-    <l:Expr> "+" <r:Factor> => ast::Expr::new(ast::ExprKind::InfixOp(Box::new(ast::ExprInfixOp {
-        lt: l.clone().into(),
-        op: ast::OpInfix::Add,
-        rt: r.clone().into()
-    })), l.span().start..r.span().start),
-    <l:Expr> "-" <r:Factor> => ast::Expr::new(ast::ExprKind::InfixOp(Box::new(ast::ExprInfixOp {
-        lt: l.clone().into(),
-        op: ast::OpInfix::Subtract,
-        rt: r.clone().into()
-    })), l.span().start..r.span().start),
+Term: ast::Expr = {
+    <l:Expr> "+" <r:Factor> => {
+        let span = l.start()..r.end();
+
+        ast::Expr::new(
+            ast::ExprKind::infix_op(
+                l.clone(),
+                ast::OpInfix::Add,
+                r.clone()
+            ),
+            span
+        )
+    },
+    <l:Expr> "-" <r:Factor> => {
+        let span = l.start()..r.end();
+
+        ast::Expr::new(
+            ast::ExprKind::infix_op(
+                l.clone(),
+                ast::OpInfix::Subtract,
+                r.clone()
+            ),
+            span
+        )
+    },
     Factor,
 };
 
-
 Factor: ast::Expr = {
-    <l:Factor> "*" <r:Term> => ast::Expr::new(ast::ExprKind::InfixOp(Box::new(ast::ExprInfixOp {
-        lt: l.clone().into(),
-        op: ast::OpInfix::Multiply,
-        rt: r.clone().into()
-    })), l.span().start..r.span().start),
-    <l:Factor> "/" <r:Term> => ast::Expr::new(ast::ExprKind::InfixOp(Box::new(ast::ExprInfixOp {
-        lt: l.clone().into(),
-        op: ast::OpInfix::Divide,
-        rt: r.clone().into()
-    })), l.span().start..r.span().start),
-    Term,
+    <l:Factor> "*" <r:Literal> => {
+        let span = l.start()..r.end();
+
+        ast::Expr::new(
+            ast::ExprKind::infix_op(
+                l.clone(),
+                ast::OpInfix::Multiply,
+                r.clone()
+            ),
+            span
+        )
+    },
+    <l:Factor> "/" <r:Literal> => {
+        let span = l.start()..r.end();
+
+        ast::Expr::new(
+            ast::ExprKind::infix_op(
+                l.clone(),
+                ast::OpInfix::Divide,
+                r.clone()
+            ),
+            span
+        )
+    },
+    Literal,
 };
 
-Term: ast::Expr = {
-    ExprLiteral,
+Literal: ast::Expr = {
+    <n:Spanned<number>> => {
+        let (value, span) = n;
+        ast::Expr::new(value.into(), span)
+    },
     "(" <Expr> ")",
-};
-
-ExprLiteral: ast::Expr = {
-    <n:Spanned<number>> => ast::Expr::new(ast::ExprKind::Literal(Box::new(ast::ExprLiteral::Number(n.0))), n.1.clone())
 };
 
 // Utility Types

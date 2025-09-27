@@ -25,7 +25,7 @@ pub fn parse(source: &str) -> ExprResult<ast::Expr> {
         Ok(ast) => ast,
         Err(err) => {
             errs.push(SyntaxError::from_parser_error(err, source));
-            ast::Expr::new(ast::ExprKind::Error, 0..0)
+            ast::Expr::error()
         }
     };
 
