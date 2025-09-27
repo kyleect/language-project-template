@@ -15,7 +15,6 @@ My starter for language projects. Rust, lalrpop, and logos.
 
 - Language server
 - VS Code extension
--
 
 ## Project
 
