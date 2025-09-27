@@ -4,9 +4,9 @@ My starter for language projects. Rust, lalrpop, and logos.
 
 ## Includes
 
-- Lexing,
-- Parsing,
-- Capturing spans,
+- Lexing
+- Parsing
+- Capturing spans
 - Error handling & diagnostics
 - Syntax tests for asserting tokens, AST, errors, diagnostics
 - Dockerized CLI
