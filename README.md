@@ -8,12 +8,14 @@ My starter for language projects. Rust, lalrpop, and logos.
 - Parsing,
 - Capturing spans,
 - Error handling & diagnostics
+- Syntax tests for asserting tokens, AST, errors, diagnostics
 - Dockerized CLI
 
 ### Future
 
 - Language server
 - VS Code extension
+-
 
 ## Project
 
