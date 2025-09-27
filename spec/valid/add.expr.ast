@@ -1,23 +1,26 @@
 Ok(
-    InfixOp(
-        ExprInfixOp {
-            lt: (
-                Literal(
-                    Number(
-                        1.0,
+    Expr {
+        kind: InfixOp(
+            ExprInfixOp {
+                lt: Expr {
+                    kind: Literal(
+                        Number(
+                            1.0,
+                        ),
                     ),
-                ),
-                0..1,
-            ),
-            op: Add,
-            rt: (
-                Literal(
-                    Number(
-                        2.0,
+                    span: 0..1,
+                },
+                op: Add,
+                rt: Expr {
+                    kind: Literal(
+                        Number(
+                            2.0,
+                        ),
                     ),
-                ),
-                4..5,
-            ),
-        },
-    ),
+                    span: 4..5,
+                },
+            },
+        ),
+        span: 0..4,
+    },
 )

@@ -11,35 +11,36 @@ pub Expr: ast::Expr = {
     Factor2,
     <e:!> => {
         errors.push(SyntaxError::from_parser_error(e.error, source));
-        ast::Expr::Error
+        ast::Expr::new(ast::ExprKind::Error, 0..0)
     }
 };
 
 Factor2: ast::Expr = {
-    <l:Spanned<Expr>> "+" <r:Spanned<Factor>> => ast::Expr::InfixOp(Box::new(ast::ExprInfixOp {
-        lt: l,
+    <l:Expr> "+" <r:Factor> => ast::Expr::new(ast::ExprKind::InfixOp(Box::new(ast::ExprInfixOp {
+        lt: l.clone().into(),
         op: ast::OpInfix::Add,
-        rt: r
-    })),
-    <l:Spanned<Expr>> "-" <r:Spanned<Factor>> => ast::Expr::InfixOp(Box::new(ast::ExprInfixOp {
-        lt: l,
+        rt: r.clone().into()
+    })), l.span().start..r.span().start),
+    <l:Expr> "-" <r:Factor> => ast::Expr::new(ast::ExprKind::InfixOp(Box::new(ast::ExprInfixOp {
+        lt: l.clone().into(),
         op: ast::OpInfix::Subtract,
-        rt: r
-    })),
+        rt: r.clone().into()
+    })), l.span().start..r.span().start),
     Factor,
 };
 
+
 Factor: ast::Expr = {
-    <l:Spanned<Factor>> "*" <r:Spanned<Term>> => ast::Expr::InfixOp(Box::new(ast::ExprInfixOp {
-        lt: l,
+    <l:Factor> "*" <r:Term> => ast::Expr::new(ast::ExprKind::InfixOp(Box::new(ast::ExprInfixOp {
+        lt: l.clone().into(),
         op: ast::OpInfix::Multiply,
-        rt: r
-    })),
-    <l:Spanned<Factor>> "/" <r:Spanned<Term>> => ast::Expr::InfixOp(Box::new(ast::ExprInfixOp {
-        lt: l,
+        rt: r.clone().into()
+    })), l.span().start..r.span().start),
+    <l:Factor> "/" <r:Term> => ast::Expr::new(ast::ExprKind::InfixOp(Box::new(ast::ExprInfixOp {
+        lt: l.clone().into(),
         op: ast::OpInfix::Divide,
-        rt: r
-    })),
+        rt: r.clone().into()
+    })), l.span().start..r.span().start),
     Term,
 };
 
@@ -49,12 +50,10 @@ Term: ast::Expr = {
 };
 
 ExprLiteral: ast::Expr = {
-    number => ast::Expr::Literal(Box::new(ast::ExprLiteral::Number(<>)))
+    <n:Spanned<number>> => ast::Expr::new(ast::ExprKind::Literal(Box::new(ast::ExprLiteral::Number(n.0))), n.1.clone())
 };
 
 // Utility Types
-
-ExprS = Spanned<Expr>;
 
 Spanned<T>: Spanned<T> = <l:@L> <t:T> <r:@R> =>
     (t, l..r);

@@ -1,9 +1,28 @@
 //! Abstract syntax tree types
 
-use crate::span::Spanned;
+use std::ops::Range;
 
 #[derive(Debug, PartialEq, Clone)]
-pub enum Expr {
+pub struct Expr {
+    kind: Box<ExprKind>,
+    span: Range<usize>,
+}
+
+impl Expr {
+    pub fn new(kind: ExprKind, span: Range<usize>) -> Self {
+        Self {
+            kind: Box::new(kind),
+            span,
+        }
+    }
+
+    pub fn span(&self) -> Range<usize> {
+        self.span.clone()
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub enum ExprKind {
     Literal(Box<ExprLiteral>),
     InfixOp(Box<ExprInfixOp>),
     Error,
@@ -17,9 +36,9 @@ pub enum ExprLiteral {
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct ExprInfixOp {
-    pub lt: ExprS,
+    pub lt: Box<Expr>,
     pub op: OpInfix,
-    pub rt: ExprS,
+    pub rt: Box<Expr>,
 }
 
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
@@ -38,5 +57,3 @@ pub enum OpInfix {
     LogicAnd,
     LogicOr,
 }
-
-pub type ExprS = Spanned<Expr>;
