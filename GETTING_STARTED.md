@@ -150,6 +150,16 @@ This project ignores whitespace by default when lexing.
 
 Removing this line in [./src/lexer.rs](./src/lexer.rs) and adding token/s for whitespace is also possible. It depends on the needs of your language/parsing project.
 
+## Abstract Syntax Tree (AST)
+
+The AST is a simplified representation of the original source code. It's made up of a tree of nodes. Each node having a "type" e.g. statement, expression, module item. What node types you choose and how simplified (or abstracted) it is will depend on the needs of your language project. Things like comments and whitespace are abstent from the AST.
+
+The AST, at least in this project, is the first attempt to modal your language's grammar in to something usable in code.
+
+### What's It Used For?
+
+ASTs can be used for code generation (IR, bytecode), static analysis, language servers, etc...
+
 ## Parsing
 
 Parsing maps lexical tokens in to an abstract syntax tree (AST). This is the first stage where the rules of your grammar are exercised and enforced.
