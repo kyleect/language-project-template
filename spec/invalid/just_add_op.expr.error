@@ -1,0 +1,27 @@
+Err(
+    [
+        (
+            SyntaxError(
+                UnrecognizedToken {
+                    token: "+",
+                    expected: [
+                        "\"(\"",
+                        "number",
+                    ],
+                },
+            ),
+            0..1,
+        ),
+        (
+            SyntaxError(
+                UnrecognizedEOF {
+                    expected: [
+                        "\"(\"",
+                        "number",
+                    ],
+                },
+            ),
+            1..1,
+        ),
+    ],
+)

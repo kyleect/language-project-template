@@ -55,8 +55,6 @@ pub enum SyntaxError {
     ExtraToken { token: String },
     #[error("invalid input")]
     InvalidToken,
-    #[error("unexpected input: {token:?}")]
-    UnexpectedInput { token: String },
     #[error("unexpected end of file; expected: {expected:?}")]
     UnrecognizedEOF { expected: Vec<String> },
     #[error("unexpected {token:?}; expected: {expected:?}")]
@@ -64,8 +62,6 @@ pub enum SyntaxError {
         token: String,
         expected: Vec<String>,
     },
-    #[error("unterminated string")]
-    UnterminatedString,
 }
 
 impl SyntaxError {
@@ -122,12 +118,6 @@ impl diagnostics::AsDiagnostic for SyntaxError {
                 severity: Some(ExprDiagnosisSeverity::ERROR),
                 message: format!("{self}"),
             },
-            SyntaxError::UnexpectedInput { token: _ } => ExprDiagnostic {
-                code: error_code,
-                range: get_range(source, span),
-                severity: Some(ExprDiagnosisSeverity::ERROR),
-                message: format!("{self}"),
-            },
             SyntaxError::UnrecognizedEOF { expected: _ } => ExprDiagnostic {
                 code: error_code,
                 range: get_range(source, span),
@@ -138,12 +128,6 @@ impl diagnostics::AsDiagnostic for SyntaxError {
                 token: _,
                 expected: _,
             } => ExprDiagnostic {
-                code: error_code,
-                range: get_range(source, span),
-                severity: Some(ExprDiagnosisSeverity::ERROR),
-                message: format!("{self}"),
-            },
-            SyntaxError::UnterminatedString => ExprDiagnostic {
                 code: error_code,
                 range: get_range(source, span),
                 severity: Some(ExprDiagnosisSeverity::ERROR),

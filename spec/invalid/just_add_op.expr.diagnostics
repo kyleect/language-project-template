@@ -1,0 +1,34 @@
+[
+    Diagnostic {
+        severity: Error,
+        code: Some(
+            "syntax",
+        ),
+        message: "unexpected \"+\"; expected: [\"\\\"(\\\"\", \"number\"]",
+        labels: [
+            Label {
+                style: Primary,
+                file_id: 0,
+                range: 0..1,
+                message: "",
+            },
+        ],
+        notes: [],
+    },
+    Diagnostic {
+        severity: Error,
+        code: Some(
+            "syntax",
+        ),
+        message: "unexpected end of file; expected: [\"\\\"(\\\"\", \"number\"]",
+        labels: [
+            Label {
+                style: Primary,
+                file_id: 0,
+                range: 1..1,
+                message: "",
+            },
+        ],
+        notes: [],
+    },
+]
