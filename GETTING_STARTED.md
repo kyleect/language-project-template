@@ -167,6 +167,138 @@ Specification tests live in [./spec/](./spec/) and are ran by [./tests/spec_test
 
 The [valid](./spec/valid/) syntax tests consist of an input file `NAME.expr` along with expected results `NAME.expr.tokens` for the lexer and `NAME.expr.ast` for the parser. These are great for both catching bugs and helping identify where the problem is.
 
+##### [./spec/valid/add.expr](./spec/valid/add.expr)
+
+```
+1 + 2
+```
+
+##### [./spec/valid/add.expr.tokens](./spec/valid/add.expr.tokens)
+
+```
+[
+    Ok(
+        (
+            0,
+            Number(
+                1.0,
+            ),
+            1,
+        ),
+    ),
+    Ok(
+        (
+            2,
+            Plus,
+            3,
+        ),
+    ),
+    Ok(
+        (
+            4,
+            Number(
+                2.0,
+            ),
+            5,
+        ),
+    ),
+]
+```
+
+##### [./spec/valid/add.expr.ast](./spec/valid/add.expr.ast)
+
+```
+Ok(
+    Expr {
+        kind: InfixOp(
+            ExprInfixOp {
+                lt: Expr {
+                    kind: Literal(
+                        Number(
+                            1.0,
+                        ),
+                    ),
+                    span: 0..1,
+                },
+                op: Add,
+                rt: Expr {
+                    kind: Literal(
+                        Number(
+                            2.0,
+                        ),
+                    ),
+                    span: 4..5,
+                },
+            },
+        ),
+        span: 0..5,
+    },
+)
+```
+
 #### Invalid Syntax Tests
 
 The [invalid](./spec/invalid/) syntax tests consist of an input file `NAME.expr` along with expected results `NAME.expr.tokens` for the lexer and expected error cases `NAME.expr.error` & `NAME.expr.diagnostics`. These are great for testing integrations like the language server or the VS code extension.
+
+##### [./spec/invalid/unclosed_parans.expr](./spec/invalid/unclosed_parans.expr)
+
+```
+(
+```
+
+##### [./spec/invalid/unclosed_parans.expr.tokens](./spec/invalid/unclosed_parans.expr.tokens)
+
+```
+[
+    Ok(
+        (
+            0,
+            LParan,
+            1,
+        ),
+    ),
+]
+```
+
+##### [./spec/invalid/unclosed_parans.expr.error](./spec/invalid/unclosed_parans.expr.error)
+
+```
+Err(
+    [
+        (
+            SyntaxError(
+                UnrecognizedEOF {
+                    expected: [
+                        "\"(\"",
+                        "number",
+                    ],
+                },
+            ),
+            1..1,
+        ),
+    ],
+)
+```
+
+##### [./spec/invalid/unclosed_parans.expr.diagnostics](./spec/invalid/unclosed_parans.expr.diagnostics)
+
+```
+[
+    Diagnostic {
+        severity: Error,
+        code: Some(
+            "syntax",
+        ),
+        message: "unexpected end of file; expected: [\"\\\"(\\\"\", \"number\"]",
+        labels: [
+            Label {
+                style: Primary,
+                file_id: 0,
+                range: 1..1,
+                message: "",
+            },
+        ],
+        notes: [],
+    },
+]
+```
