@@ -10,9 +10,9 @@
   - [x] Tokens
   - [x] Span Information
   - [x] Error Handling
-- [ ] AST
-  - [ ] Expr & ExprKind
-  - [ ] Span Information
+- [x] AST
+  - [x] Expr & ExprKind
+  - [x] Span Information
 - [x] Parsing
   - [x] LALRPOP Introduction
   - [x] Grammar File Overview
@@ -159,6 +159,74 @@ The AST, at least in this project, is the first attempt to modal your language's
 ### What's It Used For?
 
 ASTs can be used for code generation (IR, bytecode), static analysis, language servers, etc...
+
+### `Expr`
+
+This project's AST is made up of single root `Expr` expression node. There are no statements since you can only represent single expressions like this `(1 + (2 + 3))` in this project's syntax.
+
+The `Expr` has a `kind` (`ExprKind`) and a `span` (`Range<usize>`) field.
+
+#### `new(kind: ExprKind, span: Range<usize>) -> Expr`
+
+Creates a new `Expr` with kind and span information.
+
+#### `kind(&self) -> &ExprKind`
+
+Returns the `ExprKind` the `Expr`.
+
+#### `span(&self) -> &Range<usize>`
+
+Returns the `Range<usize>` span of the `Expr` in the original source code.
+
+#### `start(&self) -> usize`
+
+Returns the `Expr` span start position in the original source code.
+
+#### `end(&self) -> usize`
+
+Returns the `Expr` span end position in the original source code.
+
+### ExprKind
+
+Defines the "kind" of node the expression is. This project's syntax is simple so there's only two expression kinds plus an error kind.
+
+```rust
+#[derive(Debug, PartialEq, Clone)]
+pub enum ExprKind {
+    Literal(Box<ExprLiteral>),
+    InfixOp(Box<ExprInfixOp>),
+    Error,
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub enum ExprLiteral {
+    Number(f64),
+}
+
+#[derive(Clone, Debug, PartialEq)]
+pub struct ExprInfixOp {
+    pub lt: Box<Expr>,
+    pub op: OpInfix,
+    pub rt: Box<Expr>,
+}
+
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+pub enum OpInfix {
+    Add,
+    Subtract,
+    Multiply,
+    Divide,
+    Modulus,
+    Less,
+    LessEqual,
+    Greater,
+    GreaterEqual,
+    Equal,
+    NotEqual,
+    LogicAnd,
+    LogicOr,
+}
+```
 
 ## Parsing
 
